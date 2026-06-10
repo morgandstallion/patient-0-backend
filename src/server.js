@@ -1,10 +1,19 @@
 import express from "express";
 import { connectDB } from "./config/db.js";
 
+// import routes
+import authRoutes from "./routes/authRoutes.js";
+
 const app = express();
 const PORT = 5001;
 
 connectDB();
+
+// Body Parsing Middlewares
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use("/auth", authRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
