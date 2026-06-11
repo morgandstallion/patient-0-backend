@@ -49,5 +49,15 @@ model Cart{
   updatedAt DateTime @updatedAt
 }
 
+model CartItem{
+  id String @id @unique @default(cuid())
+  cartId String
+  cart Cart @relation( fields: [cartId], references: [id])
+  quantity Int
+  createdAt DateTime @default(now())
+}
+
+
+
 
 
