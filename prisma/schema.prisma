@@ -14,12 +14,91 @@ datasource db {
 }
 
 model User{
-  id String @id @unique @default(uuid())
+  id String @id @unique @default(cuid())
   firstName String
   lastName String
   email String @unique
   password String
   role String
+  cart Cart[]
+  orders Order[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Product{
+  id String @id @unique @default(cuid())
+  name String
+  description String
+  price Int
+  stockQuantity Int
+  imageUrl String
+  isActive Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orderItems OrderItem[]
+}
+
+model Cart{
+  id String @id @unique @default(cuid())
+  userId String 
+  user User @relation(fields: [userId], references: [id])
+  cartItems CartItem[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CartItem{
+  id String @id @unique @default(cuid())
+  cartId String
+  cart Cart @relation( fields: [cartId], references: [id])
+  quantity Int
+  createdAt DateTime @default(now())
+}
+
+model Order{
+  id String @id @unique @default(cuid())
+  userId String
+  user User @relation( fields:[userId], references: [id] )
+  totalAmount Int
+  orderItems OrderItem[]
+  status OrderStatus
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OrderItem{
+  id String @id @unique @default(cuid())
+  orderId String
+  order Order @relation(fields: [orderId], references: [id])
+
+  productId String
+  productName String
+  productPrice Int
+  quantity Int
+  product Product @relation(fields: [productId], references: [id])
+
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  READY
+  COMPLETED
+  CANCELLED
+  PAYMENT_PENDING
+  PAID
+  PACKING
+  READY_FOR_PICKUP
+  IN_PICKUP_QUEUE
+  COLLECTED
+}
+
+
+
+
+
+
+
+
