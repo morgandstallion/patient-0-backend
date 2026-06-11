@@ -40,3 +40,14 @@ model Product{
   orderItems OrderItem[]
 }
 
+model Cart{
+  id String @id @unique @default(cuid())
+  userId String 
+  user User @relation(fields: [userId], references: [id])
+  cartItems CartItem[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+
